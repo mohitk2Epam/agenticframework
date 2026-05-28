@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Grants access to create Leads via the Lead Capture Form on Account and provides field-level access to Source_Account__c and Capture_Notes__c.</description>
+    <hasActivationRequired>false</hasActivationRequired>
+    <label>Lead Capture Access</label>
+
+    <!-- Apex class access -->
+    <classAccesses>
+        <apexClass>LeadCaptureController</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+
+    <!-- Field-level security -->
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Lead.Capture_Notes__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Lead.Source_Account__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+
+    <!-- Object permissions for Lead -->
+    <objectPermissions>
+        <allowCreate>true</allowCreate>
+        <allowDelete>false</allowDelete>
+        <allowEdit>false</allowEdit>
+        <allowRead>true</allowRead>
+        <modifyAllRecords>false</modifyAllRecords>
+        <object>Lead</object>
+        <viewAllRecords>false</viewAllRecords>
+    </objectPermissions>
+</PermissionSet>

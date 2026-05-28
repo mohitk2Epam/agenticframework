@@ -1,0 +1,25 @@
+# Ignore OS-generated files
+.DS_Store
+Thumbs.db
+
+# Ignore editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Ignore node modules
+node_modules/
+
+# Ignore test results
+test-results/
+.nyc_output/
+
+# Ignore local config
+.env
+.env.local
+
+# Ignore build artifacts
+dist/
+build/

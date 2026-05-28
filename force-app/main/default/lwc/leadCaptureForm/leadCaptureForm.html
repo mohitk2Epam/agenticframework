@@ -1,0 +1,86 @@
+<template>
+    <lightning-card title="Lead Capture" icon-name="standard:lead">
+        <div class="slds-var-p-around_medium">
+            <div class="form-grid">
+                <!-- First Name -->
+                <lightning-input
+                    label="First Name"
+                    value={firstName}
+                    data-field="firstName"
+                    onchange={handleChange}>
+                </lightning-input>
+
+                <!-- Last Name (required) -->
+                <lightning-input
+                    label="Last Name"
+                    value={lastName}
+                    data-field="lastName"
+                    required
+                    onchange={handleChange}>
+                </lightning-input>
+
+                <!-- Email (required) -->
+                <lightning-input
+                    label="Email"
+                    type="email"
+                    value={email}
+                    data-field="email"
+                    required
+                    onchange={handleChange}>
+                </lightning-input>
+
+                <!-- Phone -->
+                <lightning-input
+                    label="Phone"
+                    type="tel"
+                    value={phone}
+                    data-field="phone"
+                    onchange={handleChange}>
+                </lightning-input>
+
+                <!-- Company (read-only, prefilled from Account.Name) -->
+                <lightning-input
+                    label="Company"
+                    value={companyName}
+                    readonly>
+                </lightning-input>
+
+                <!-- Lead Source (required) -->
+                <lightning-combobox
+                    label="Lead Source"
+                    value={leadSource}
+                    options={leadSourceOptions}
+                    data-field="leadSource"
+                    required
+                    onchange={handleChange}>
+                </lightning-combobox>
+
+                <!-- Capture Notes (spans both columns) -->
+                <div class="full-width">
+                    <lightning-textarea
+                        label="Capture Notes"
+                        value={notes}
+                        data-field="notes"
+                        max-length="500"
+                        onchange={handleChange}>
+                    </lightning-textarea>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="slds-var-m-top_medium slds-button-group">
+                <lightning-button
+                    label="Submit"
+                    variant="brand"
+                    disabled={isSubmitting}
+                    onclick={handleSubmit}>
+                </lightning-button>
+                <lightning-button
+                    label="Clear"
+                    variant="neutral"
+                    onclick={handleClear}>
+                </lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>
