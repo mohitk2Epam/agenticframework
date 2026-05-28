@@ -1,0 +1,7 @@
+:host {
+    display: block;
+}
+
+.slds-card_expanded {
+    border-color: var(--slds-g-color-brand-base-50);
+}

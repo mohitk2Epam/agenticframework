@@ -1,0 +1,69 @@
+{
+  "skill_name": "lwc-reviewer",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Review the accountCard LWC component",
+      "expected_output": "A well-structured review report scoring the component across 5 categories. accountCard is a clean component using @wire, SLDS, proper error/loading states — should score 16-20 range (Good). Report saved to code-review/ with correct filename format.",
+      "files": [
+        "evals/files/accountCard/accountCard.js",
+        "evals/files/accountCard/accountCard.html",
+        "evals/files/accountCard/accountCard.css",
+        "evals/files/accountCard/accountCard.js-meta.xml"
+      ],
+      "expectations": [
+        "Report contains scores for all 5 categories: Bundle Structure, JS Code Quality, Template & Accessibility, Performance, Error Handling & UX",
+        "Each category score is between 1 and 5",
+        "Total score is the sum of all 5 category scores",
+        "Total score is between 16 and 22 (component is well-written)",
+        "Report mentions use of @wire as a positive pattern in Performance category",
+        "Report mentions loading and error states as positive in Error Handling category",
+        "Report is saved to a file matching pattern code-review/accountCard-YYYY-MM-DD-{score}.md",
+        "Report follows the template structure from assets/review-result-template.md",
+        "Naming conventions from references/lwc-naming-conventions.md are referenced in JS Code Quality",
+        "Report includes a Top Priority Actions section with at least 1 item"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "Review the dataExplorer LWC component",
+      "expected_output": "A critical review identifying multiple issues. dataExplorer has single-letter variables, no try/catch, no SLDS, inline styles, legacy if:true, no disconnectedCallback cleanup, god-component. Should score 6-12 range (Needs Work to Acceptable).",
+      "files": [
+        "evals/files/dataExplorer/dataExplorer.js",
+        "evals/files/dataExplorer/dataExplorer.html",
+        "evals/files/dataExplorer/dataExplorer.js-meta.xml"
+      ],
+      "expectations": [
+        "Report contains scores for all 5 categories",
+        "Total score is between 5 and 13 (component has significant issues)",
+        "JS Code Quality score is 1 or 2 — single-letter variable names (d, f, x, pg, srch) violate naming conventions",
+        "Report flags the use of abbreviated variable names as a naming convention violation",
+        "Performance score flags missing disconnectedCallback for the resize event listener",
+        "Error Handling score flags missing try/catch on async loadData method",
+        "Template & Accessibility score flags use of inline styles instead of SLDS",
+        "Template & Accessibility flags legacy if:true/if:false instead of lwc:if",
+        "Bundle Structure flags this as a god-component — everything in one file, 100+ lines",
+        "Report is saved to code-review/dataExplorer-YYYY-MM-DD-{score}.md"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Review the simpleGreeting LWC component",
+      "expected_output": "A review of a trivial component. Should handle the edge case where most categories are N/A or have nothing to check. Score around 13-17. The review should note simplicity without penalizing for features that aren't needed.",
+      "files": [
+        "evals/files/simpleGreeting/simpleGreeting.js",
+        "evals/files/simpleGreeting/simpleGreeting.html",
+        "evals/files/simpleGreeting/simpleGreeting.js-meta.xml"
+      ],
+      "expectations": [
+        "Report contains scores for all 5 categories",
+        "Total score is between 12 and 18",
+        "Performance category notes N/A or scores 3 with note about no async operations",
+        "Error Handling category notes N/A or scores 3 with note about no async operations",
+        "Report does NOT penalize the component for being simple",
+        "Naming conventions are checked even on this small component",
+        "Report is saved to code-review/simpleGreeting-YYYY-MM-DD-{score}.md"
+      ]
+    }
+  ]
+}

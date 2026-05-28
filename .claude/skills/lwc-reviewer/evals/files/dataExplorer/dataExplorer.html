@@ -1,0 +1,62 @@
+<template>
+    <div class="container" style="padding: 16px; border: 1px solid #ddd; border-radius: 8px;">
+        <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+            <div>
+                <select onchange={handleTabChange}>
+                    <option value="accounts">Accounts</option>
+                    <option value="contacts">Contacts</option>
+                    <option value="opportunities">Opportunities</option>
+                </select>
+            </div>
+            <div>
+                <input type="text" placeholder="Search..." value={srch} onkeyup={handleSearch} />
+            </div>
+            <div>
+                <button onclick={handleExport}>Export CSV</button>
+                <button onclick={handleRefresh}>Refresh</button>
+            </div>
+        </div>
+
+        <template if:true={x}>
+            <div style="text-align: center; padding: 20px;">Loading...</div>
+        </template>
+
+        <template if:false={x}>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <template for:each={cols} for:item="col">
+                            <th key={col.fieldName} style="border-bottom: 2px solid #ddd; padding: 8px; text-align: left; cursor: pointer;" data-col={col.fieldName} onclick={handleSort}>
+                                {col.label}
+                            </th>
+                        </template>
+                    </tr>
+                    <tr>
+                        <template for:each={cols} for:item="col">
+                            <th key={col.fieldName} style="padding: 4px;">
+                                <input type="text" data-col={col.fieldName} onkeyup={handleFilter} placeholder="Filter..." style="width: 100%; font-size: 12px;" />
+                            </th>
+                        </template>
+                    </tr>
+                </thead>
+                <tbody>
+                    <template for:each={f} for:item="row">
+                        <tr key={row.Id} data-id={row.Id} onclick={handleRowClick} style="cursor: pointer;">
+                            <template for:each={cols} for:item="col">
+                                <td key={col.fieldName} style="border-bottom: 1px solid #eee; padding: 8px;">
+                                    {row[col.fieldName]}
+                                </td>
+                            </template>
+                        </tr>
+                    </template>
+                </tbody>
+            </table>
+
+            <div style="display: flex; justify-content: space-between; margin-top: 12px;">
+                <button onclick={handlePrev}>Previous</button>
+                <span>Page {pg}</span>
+                <button onclick={handleNext}>Next</button>
+            </div>
+        </template>
+    </div>
+</template>

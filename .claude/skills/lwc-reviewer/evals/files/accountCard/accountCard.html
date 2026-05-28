@@ -1,0 +1,52 @@
+<template>
+    <lightning-card title={accountName} icon-name="standard:account">
+        <template lwc:if={isLoading}>
+            <lightning-spinner alternative-text="Loading account" size="small"></lightning-spinner>
+        </template>
+
+        <template lwc:if={hasError}>
+            <div class="slds-p-around_medium">
+                <p class="slds-text-color_error">Unable to load account details. Please try again later.</p>
+            </div>
+        </template>
+
+        <template lwc:if={account.data}>
+            <div class="slds-p-horizontal_medium slds-p-bottom_medium">
+                <dl class="slds-list_horizontal slds-wrap">
+                    <dt class="slds-item_label slds-truncate">Industry</dt>
+                    <dd class="slds-item_detail slds-truncate">{industry}</dd>
+
+                    <dt class="slds-item_label slds-truncate">Annual Revenue</dt>
+                    <dd class="slds-item_detail slds-truncate">{revenue}</dd>
+
+                    <dt class="slds-item_label slds-truncate">Phone</dt>
+                    <dd class="slds-item_detail slds-truncate">
+                        <lightning-formatted-phone value={phone}></lightning-formatted-phone>
+                        <lightning-button-icon
+                            icon-name="utility:copy"
+                            alternative-text="Copy phone"
+                            title="Copy phone number"
+                            variant="bare"
+                            size="small"
+                            onclick={handleCopyPhone}
+                        ></lightning-button-icon>
+                    </dd>
+                </dl>
+
+                <template lwc:if={isExpanded}>
+                    <div class="slds-m-top_medium">
+                        <slot name="details"></slot>
+                    </div>
+                </template>
+            </div>
+
+            <div slot="actions">
+                <lightning-button
+                    label={isExpanded ? 'Show Less' : 'Show More'}
+                    onclick={handleToggleExpand}
+                    variant="neutral"
+                ></lightning-button>
+            </div>
+        </template>
+    </lightning-card>
+</template>

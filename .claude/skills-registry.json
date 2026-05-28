@@ -1,0 +1,202 @@
+{
+  "version": "1.0.0",
+  "description": "SF AI Dev Framework skills registry — skill discovery, orchestration, and agent mapping",
+
+  "guardrails": {
+    "dangerous_dml": {
+      "patterns": ["DELETE FROM \\w+ (;|$)", "UPDATE \\w+ SET .* (?<!WHERE.*)$"],
+      "severity": "CRITICAL",
+      "action": "block",
+      "message": "Destructive DML without WHERE clause detected"
+    },
+    "unbounded_soql": {
+      "patterns": ["SELECT .* FROM \\w+ (?!.*LIMIT)"],
+      "severity": "HIGH",
+      "action": "warn",
+      "message": "Unbounded SOQL query — consider adding LIMIT"
+    },
+    "hardcoded_credentials": {
+      "patterns": ["(password|api_key|secret|token)\\s*=\\s*['\"][^'\"]+['\"]"],
+      "severity": "CRITICAL",
+      "action": "block",
+      "message": "Hardcoded credentials detected — use Named Credentials or Custom Metadata"
+    },
+    "missing_sharing_keyword": {
+      "patterns": ["public class \\w+(?! (with|without|inherited) sharing)"],
+      "severity": "MEDIUM",
+      "action": "warn",
+      "message": "Consider adding explicit sharing keyword (with sharing recommended)"
+    },
+    "hardcoded_salesforce_ids": {
+      "patterns": ["['\"][a-zA-Z0-9]{15}['\"]|['\"][a-zA-Z0-9]{18}['\"]"],
+      "severity": "MEDIUM",
+      "action": "warn",
+      "message": "Hardcoded Salesforce ID detected — consider using Custom Metadata"
+    }
+  },
+
+  "skills": {
+    "sf-apex": {
+      "path": ".claude/skills/sf-apex/SKILL.md",
+      "description": "Apex code generation, review, patterns, and best practices",
+      "keywords": ["apex", "trigger", "class", "batch", "queueable", "schedulable", "invocable", "selector", "service layer", "domain"],
+      "filePatterns": ["\\.cls$", "\\.trigger$"],
+      "usedByAgents": ["dev-agent"],
+      "orchestration": {
+        "next_steps": ["sf-testing", "sf-deploy"],
+        "commonly_with": ["sf-lwc", "sf-metadata"]
+      }
+    },
+
+    "sf-testing": {
+      "path": ".claude/skills/sf-testing/SKILL.md",
+      "description": "Apex test writing, execution, coverage analysis, mocking, factories",
+      "keywords": ["test", "coverage", "assert", "mock", "unit test", "test factory", "test setup"],
+      "filePatterns": [".*Test\\.cls$", ".*_Test\\.cls$"],
+      "usedByAgents": ["dev-agent"],
+      "orchestration": {
+        "prerequisites": ["sf-apex"],
+        "next_steps": ["sf-deploy"]
+      }
+    },
+
+    "sf-soql": {
+      "path": ".claude/skills/sf-soql/SKILL.md",
+      "description": "SOQL query generation, optimization, security patterns",
+      "keywords": ["soql", "query", "select", "where", "aggregate", "subquery", "relationship query"],
+      "filePatterns": ["\\.cls$"],
+      "usedByAgents": ["dev-agent"],
+      "orchestration": {
+        "commonly_with": ["sf-apex"]
+      }
+    },
+
+    "sf-lwc": {
+      "path": ".claude/skills/sf-lwc/SKILL.md",
+      "description": "Lightning Web Components — structure, wire service, events, SLDS",
+      "keywords": ["lwc", "lightning web component", "wire", "apex wire", "slds", "html template", "jest", "lms"],
+      "filePatterns": ["lwc/.*\\.(js|html|css)$", "\\.js-meta\\.xml$"],
+      "usedByAgents": ["dev-agent"],
+      "orchestration": {
+        "prerequisites": ["sf-apex"],
+        "next_steps": ["sf-deploy"]
+      }
+    },
+
+    "sf-deploy": {
+      "path": ".claude/skills/sf-deploy/SKILL.md",
+      "description": "Salesforce deployment — sf project deploy, error handling, retry logic",
+      "keywords": ["deploy", "deployment", "push", "sandbox", "scratch org", "validate"],
+      "filePatterns": [],
+      "usedByAgents": ["deploy-agent"],
+      "orchestration": {
+        "commonly_with": ["sf-testing"]
+      }
+    },
+
+    "sf-metadata": {
+      "path": ".claude/skills/sf-metadata/SKILL.md",
+      "description": "Metadata operations — custom objects, fields, permission sets, validation rules",
+      "keywords": ["custom object", "custom field", "metadata", "permission set", "validation rule", "picklist", "lookup"],
+      "filePatterns": ["\\.object-meta\\.xml$", "\\.field-meta\\.xml$", "\\.permissionset-meta\\.xml$"],
+      "usedByAgents": ["dev-agent"],
+      "orchestration": {
+        "next_steps": ["sf-deploy", "sf-apex"]
+      }
+    },
+
+    "sf-permissions": {
+      "path": ".claude/skills/sf-permissions/SKILL.md",
+      "description": "Permission set analysis, FLS, object permissions, profile configuration",
+      "keywords": ["permission set", "fls", "field-level security", "profile", "object permissions", "sharing"],
+      "filePatterns": ["\\.permissionset-meta\\.xml$", "\\.profile-meta\\.xml$"],
+      "usedByAgents": ["dev-agent"],
+      "orchestration": {
+        "commonly_with": ["sf-metadata", "sf-deploy"]
+      }
+    },
+
+    "sf-data": {
+      "path": ".claude/skills/sf-data/SKILL.md",
+      "description": "Test data factories, data import/export, bulk data operations",
+      "keywords": ["test data", "data factory", "data import", "bulk", "seed data"],
+      "filePatterns": [],
+      "usedByAgents": ["dev-agent"],
+      "orchestration": {
+        "commonly_with": ["sf-testing", "sf-apex"]
+      }
+    },
+
+    "sf-debug": {
+      "path": ".claude/skills/sf-debug/SKILL.md",
+      "description": "Debug log analysis, error diagnosis, performance troubleshooting",
+      "keywords": ["debug", "debug log", "error", "exception", "stack trace", "performance"],
+      "filePatterns": ["\\.log$"],
+      "usedByAgents": ["dev-agent"],
+      "orchestration": {
+        "commonly_with": ["sf-apex", "sf-testing"]
+      }
+    },
+
+    "sf-solution": {
+      "path": ".claude/skills/sf-solution/SKILL.md",
+      "description": "Interactive solution design with clarification wizard. Parse requirements, ask questions, design solution, self-validate",
+      "keywords": ["solution", "design", "requirements", "technical design", "architecture", "clarification", "wizard"],
+      "filePatterns": [],
+      "usedByAgents": [],
+      "orchestration": {
+        "next_steps": ["dev-agent"],
+        "commonly_with": ["sf-solution-jira"]
+      }
+    },
+
+    "sf-solution-jira": {
+      "path": ".claude/skills/sf-solution-jira/SKILL.md",
+      "description": "Jira integration orchestrator for solution design. Fetches story, invokes sf-solution skill, posts solution back to Jira",
+      "keywords": ["jira", "solution", "user story", "technical design", "atlassian", "orchestration"],
+      "filePatterns": [],
+      "usedByAgents": [],
+      "orchestration": {
+        "uses_skills": ["sf-solution"],
+        "next_steps": ["dev-agent"]
+      }
+    }
+  },
+
+  "agents": {
+    "dev-agent": {
+      "path": ".claude/agents/dev-agent.md",
+      "description": "Write code + tests + deploy + verify (one context for full write-test-deploy cycle)",
+      "model": "sonnet",
+      "skills": ["sf-apex", "sf-lwc", "sf-testing", "sf-soql", "sf-metadata", "sf-deploy"],
+      "tools": ["mcp__chrome-devtools"],
+      "input": "Solution JSON + project context",
+      "output": "Implementation files + deployment status + test results + coverage"
+    },
+    "deploy-agent": {
+      "path": ".claude/agents/deploy-agent.md",
+      "description": "Deploy to org + handle errors + retry (procedural, isolated)",
+      "model": "haiku",
+      "skills": ["sf-deploy"],
+      "input": "Files to deploy",
+      "output": "Deployment status + errors if any"
+    },
+    "browser-verify-agent": {
+      "path": ".claude/agents/browser-verify-agent.md",
+      "description": "Browser verification of deployed implementations using Chrome DevTools MCP",
+      "model": "sonnet",
+      "skills": [],
+      "tools": ["mcp__chrome-devtools"],
+      "input": "Implementation context (dev-agent output or user description) + org URL",
+      "output": "Verification results (pass/partial/fail) + screenshots + console errors"
+    },
+    "pr-agent": {
+      "path": ".claude/agents/pr-agent.md",
+      "description": "Create branch + commit + push + PR (isolated, reads git diff fresh)",
+      "model": "sonnet",
+      "skills": [],
+      "input": "Solution summary + files changed + test results + Jira reference",
+      "output": "PR URL"
+    }
+  }
+}
